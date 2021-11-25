@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unitymain.student.dao.ErrorBookDao">
+
+    <resultMap id="BaseResultMap" type="com.unitymain.student.entity.ErrorBook">
+        <!--@Table error_book-->
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="subject" column="subject" jdbcType="VARCHAR"/>
+        <result property="solution" column="solution" jdbcType="VARCHAR"/>
+        <result property="image" column="image" jdbcType="OTHER"/>
+        <result property="type" column="type" jdbcType="VARCHAR"/>
+        <result property="questionType" column="question_type" jdbcType="VARCHAR"/>
+        <result property="answerTrue" column="answer_true" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="ErrorBookDtoMap" type="com.unitymain.student.bean.ErrorBookDto">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="subject" column="subject" jdbcType="VARCHAR"/>
+        <result property="solution" column="solution" jdbcType="VARCHAR"/>
+        <result property="image" column="image" jdbcType="OTHER"/>
+        <result property="type" column="type" jdbcType="VARCHAR"/>
+        <result property="questionType" column="question_type" jdbcType="VARCHAR"/>
+        <result property="answerTrue" column="answer_true" jdbcType="VARCHAR"/>
+        <collection property="answer" ofType="com.unitymain.student.entity.Answer">
+            <result property="id" column="id" jdbcType="INTEGER"/>
+            <result property="num" column="num" jdbcType="VARCHAR"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+            <result property="questionId" column="question_id" jdbcType="INTEGER"/>
+        </collection>
+    </resultMap>
+
+    <select id="queryDtoByLimit" resultMap="ErrorBookDtoMap">
+        SELECT
+            e.id,
+            e.`subject`,
+            e.solution,
+            e.image,
+            e.type,
+            e.question_type,
+            e.answer_true,
+            a.num,
+            a.content,
+            a.question_id
+        FROM
+            error_book AS e
+            LEFT JOIN answer AS a ON a.question_id = e.id
+        <where>
+            <if test="key != null and key !='' " >
+                (e.SUBJECT LIKE CONCAT('%',#{key},'%')
+                OR a.content LIKE CONCAT('%',#{key},'%')
+                )
+            </if>
+            <if test="type !=null and type !='' ">
+                and (e.type = #{type}
+                or e.question_type = #{type})
+            </if>
+        </where>
+
+
+    </select>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          id, subject, solution, image, type, question_type, answer_true
+        from student.error_book
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          id, subject, solution, image, type, question_type, answer_true
+        from student.error_book
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          id, subject, solution, image, type, question_type, answer_true
+        from student.error_book
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="subject != null and subject != ''">
+                and subject = #{subject}
+            </if>
+            <if test="solution != null and solution != ''">
+                and solution = #{solution}
+            </if>
+            <if test="image != null">
+                and image = #{image}
+            </if>
+            <if test="type != null and type != ''">
+                and type = #{type}
+            </if>
+            <if test="questionType != null and questionType != ''">
+                and question_type = #{questionType}
+            </if>
+            <if test="answerTrue != null and answerTrue != ''">
+                and answer_true = #{answerTrue}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into student.error_book(subject, solution, image, type, question_type, answer_true)
+        values (#{subject}, #{solution}, #{image}, #{type}, #{questionType}, #{answerTrue})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update student.error_book
+        <set>
+            <if test="subject != null and subject != ''">
+                subject = #{subject},
+            </if>
+            <if test="solution != null and solution != ''">
+                solution = #{solution},
+            </if>
+            <if test="image != null">
+                image = #{image},
+            </if>
+            <if test="type != null and type != ''">
+                type = #{type},
+            </if>
+            <if test="questionType != null and questionType != ''">
+                question_type = #{questionType},
+            </if>
+            <if test="answerTrue != null and answerTrue != ''">
+                answer_true = #{answerTrue},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from student.error_book where id = #{id}
+    </delete>
+
+</mapper>

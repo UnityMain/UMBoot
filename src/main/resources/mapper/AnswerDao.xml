@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unitymain.student.dao.AnswerDao">
+
+    <resultMap id="BaseResultMap" type="com.unitymain.student.entity.Answer">
+        <!--@Table answer-->
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="num" column="num" jdbcType="VARCHAR"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="questionId" column="question_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          id, num, content, question_id
+        from student.answer
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          id, num, content, question_id
+        from student.answer
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          id, num, content, question_id
+        from student.answer
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="num != null and num != ''">
+                and num = #{num}
+            </if>
+            <if test="content != null and content != ''">
+                and content = #{content}
+            </if>
+            <if test="questionId != null">
+                and question_id = #{questionId}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into student.answer(num, content, question_id)
+        values (#{num}, #{content}, #{questionId})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update student.answer
+        <set>
+            <if test="num != null and num != ''">
+                num = #{num},
+            </if>
+            <if test="content != null and content != ''">
+                content = #{content},
+            </if>
+            <if test="questionId != null">
+                question_id = #{questionId},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from student.answer where id = #{id}
+    </delete>
+
+</mapper>

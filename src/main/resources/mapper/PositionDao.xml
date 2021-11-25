@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unitymain.student.dao.PositionDao">
+
+    <resultMap id="BaseResultMap" type="com.unitymain.student.entity.Position">
+        <!--@Table position-->
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="fromArea" column="from_area" jdbcType="VARCHAR"/>
+        <result property="unitCode" column="unit_code" jdbcType="VARCHAR"/>
+        <result property="unitType" column="unit_type" jdbcType="VARCHAR"/>
+        <result property="unitName" column="unit_name" jdbcType="VARCHAR"/>
+        <result property="unitNature" column="unit_nature" jdbcType="VARCHAR"/>
+        <result property="jobCode" column="job_code" jdbcType="VARCHAR"/>
+        <result property="jobName" column="job_name" jdbcType="VARCHAR"/>
+        <result property="jobType" column="job_type" jdbcType="VARCHAR"/>
+        <result property="jobDesc" column="job_desc" jdbcType="VARCHAR"/>
+        <result property="number" column="number" jdbcType="INTEGER"/>
+        <result property="examType" column="exam_type" jdbcType="VARCHAR"/>
+        <result property="education" column="education" jdbcType="VARCHAR"/>
+        <result property="degree" column="degree" jdbcType="VARCHAR"/>
+        <result property="zhongzhuanZy" column="zhongzhuan_zy" jdbcType="VARCHAR"/>
+        <result property="dazhuanZy" column="dazhuan_zy" jdbcType="VARCHAR"/>
+        <result property="benkeZy" column="benke_zy" jdbcType="VARCHAR"/>
+        <result property="yanjiushengZy" column="yanjiusheng_zy" jdbcType="VARCHAR"/>
+        <result property="otherDemand" column="other_demand" jdbcType="VARCHAR"/>
+        <result property="enrollDate" column="enroll_date" jdbcType="TIMESTAMP"/>
+        <result property="endDate" column="end_date" jdbcType="TIMESTAMP"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          id, from_area, unit_code, unit_type, unit_name, unit_nature, job_code, job_name, job_type, job_desc, number, exam_type, education, degree, zhongzhuan_zy, dazhuan_zy, benke_zy, yanjiusheng_zy, other_demand, enroll_date, end_date, remarks
+        from student.position
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          id, from_area, unit_code, unit_type, unit_name, unit_nature, job_code, job_name, job_type, job_desc, number, exam_type, education, degree, zhongzhuan_zy, dazhuan_zy, benke_zy, yanjiusheng_zy, other_demand, enroll_date, end_date, remarks
+        from student.position
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          id, from_area, unit_code, unit_type, unit_name, unit_nature, job_code, job_name, job_type, job_desc, number, exam_type, education, degree, zhongzhuan_zy, dazhuan_zy, benke_zy, yanjiusheng_zy, other_demand, enroll_date, end_date, remarks
+        from student.position
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="fromArea != null and fromArea != ''">
+                and from_area = #{fromArea}
+            </if>
+            <if test="unitCode != null and unitCode != ''">
+                and unit_code = #{unitCode}
+            </if>
+            <if test="unitType != null and unitType != ''">
+                and unit_type = #{unitType}
+            </if>
+            <if test="unitName != null and unitName != ''">
+                and unit_name = #{unitName}
+            </if>
+            <if test="unitNature != null and unitNature != ''">
+                and unit_nature = #{unitNature}
+            </if>
+            <if test="jobCode != null and jobCode != ''">
+                and job_code = #{jobCode}
+            </if>
+            <if test="jobName != null and jobName != ''">
+                and job_name = #{jobName}
+            </if>
+            <if test="jobType != null and jobType != ''">
+                and job_type = #{jobType}
+            </if>
+            <if test="jobDesc != null and jobDesc != ''">
+                and job_desc = #{jobDesc}
+            </if>
+            <if test="number != null">
+                and number = #{number}
+            </if>
+            <if test="examType != null and examType != ''">
+                and exam_type = #{examType}
+            </if>
+            <if test="education != null and education != ''">
+                and education = #{education}
+            </if>
+            <if test="degree != null and degree != ''">
+                and degree = #{degree}
+            </if>
+            <if test="zhongzhuanZy != null and zhongzhuanZy != ''">
+                and zhongzhuan_zy = #{zhongzhuanZy}
+            </if>
+            <if test="dazhuanZy != null and dazhuanZy != ''">
+                and dazhuan_zy = #{dazhuanZy}
+            </if>
+            <if test="benkeZy != null and benkeZy != ''">
+                and benke_zy = #{benkeZy}
+            </if>
+            <if test="yanjiushengZy != null and yanjiushengZy != ''">
+                and yanjiusheng_zy = #{yanjiushengZy}
+            </if>
+            <if test="otherDemand != null and otherDemand != ''">
+                and other_demand = #{otherDemand}
+            </if>
+            <if test="enrollDate != null">
+                and enroll_date = #{enrollDate}
+            </if>
+            <if test="endDate != null">
+                and end_date = #{endDate}
+            </if>
+            <if test="remarks != null and remarks != ''">
+                and remarks = #{remarks}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into student.position(from_area, unit_code, unit_type, unit_name, unit_nature, job_code, job_name, job_type, job_desc, number, exam_type, education, degree, zhongzhuan_zy, dazhuan_zy, benke_zy, yanjiusheng_zy, other_demand, enroll_date, end_date, remarks)
+        values (#{fromArea}, #{unitCode}, #{unitType}, #{unitName}, #{unitNature}, #{jobCode}, #{jobName}, #{jobType}, #{jobDesc}, #{number}, #{examType}, #{education}, #{degree}, #{zhongzhuanZy}, #{dazhuanZy}, #{benkeZy}, #{yanjiushengZy}, #{otherDemand}, #{enrollDate}, #{endDate}, #{remarks})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update student.position
+        <set>
+            <if test="fromArea != null and fromArea != ''">
+                from_area = #{fromArea},
+            </if>
+            <if test="unitCode != null and unitCode != ''">
+                unit_code = #{unitCode},
+            </if>
+            <if test="unitType != null and unitType != ''">
+                unit_type = #{unitType},
+            </if>
+            <if test="unitName != null and unitName != ''">
+                unit_name = #{unitName},
+            </if>
+            <if test="unitNature != null and unitNature != ''">
+                unit_nature = #{unitNature},
+            </if>
+            <if test="jobCode != null and jobCode != ''">
+                job_code = #{jobCode},
+            </if>
+            <if test="jobName != null and jobName != ''">
+                job_name = #{jobName},
+            </if>
+            <if test="jobType != null and jobType != ''">
+                job_type = #{jobType},
+            </if>
+            <if test="jobDesc != null and jobDesc != ''">
+                job_desc = #{jobDesc},
+            </if>
+            <if test="number != null">
+                number = #{number},
+            </if>
+            <if test="examType != null and examType != ''">
+                exam_type = #{examType},
+            </if>
+            <if test="education != null and education != ''">
+                education = #{education},
+            </if>
+            <if test="degree != null and degree != ''">
+                degree = #{degree},
+            </if>
+            <if test="zhongzhuanZy != null and zhongzhuanZy != ''">
+                zhongzhuan_zy = #{zhongzhuanZy},
+            </if>
+            <if test="dazhuanZy != null and dazhuanZy != ''">
+                dazhuan_zy = #{dazhuanZy},
+            </if>
+            <if test="benkeZy != null and benkeZy != ''">
+                benke_zy = #{benkeZy},
+            </if>
+            <if test="yanjiushengZy != null and yanjiushengZy != ''">
+                yanjiusheng_zy = #{yanjiushengZy},
+            </if>
+            <if test="otherDemand != null and otherDemand != ''">
+                other_demand = #{otherDemand},
+            </if>
+            <if test="enrollDate != null">
+                enroll_date = #{enrollDate},
+            </if>
+            <if test="endDate != null">
+                end_date = #{endDate},
+            </if>
+            <if test="remarks != null and remarks != ''">
+                remarks = #{remarks},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from student.position where id = #{id}
+    </delete>
+
+</mapper>
