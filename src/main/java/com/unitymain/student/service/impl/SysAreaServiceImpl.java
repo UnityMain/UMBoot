@@ -26,7 +26,7 @@ public class SysAreaServiceImpl implements SysAreaService {
      * @return 实例对象
      */
     @Override
-    public SysArea queryById(Integer id) {
+    public SysArea queryById(String id) {
         return this.sysAreaDao.queryById(id);
     }
 
@@ -73,7 +73,7 @@ public class SysAreaServiceImpl implements SysAreaService {
      * @return 是否成功
      */
     @Override
-    public boolean deleteById(Integer id) {
+    public boolean deleteById(String id) {
         return this.sysAreaDao.deleteById(id) > 0;
     }
 }

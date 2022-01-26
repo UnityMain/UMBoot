@@ -5,17 +5,16 @@ import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
-import com.baomidou.mybatisplus.extension.api.R;
 import com.unitymain.student.bean.ErrorBookDto;
 import com.unitymain.student.entity.QuestionType;
 import com.unitymain.student.service.ErrorBookService;
 import com.unitymain.student.service.QuestionTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 
 @CrossOrigin
@@ -28,13 +27,13 @@ public class ErrorBookController {
     private QuestionTypeService questionTypeService;
 
     @PostMapping("/errorBookDto")
-    public R<List<ErrorBookDto>> queryDtoByLimit(String key,String type) {
+    public ResponseEntity<List<ErrorBookDto>> queryDtoByLimit(String key,String type) {
         List<ErrorBookDto> errorBookDtos = errorBookService.queryDtoByLimit(key,type);
-        return R.ok(errorBookDtos);
+        return ResponseEntity.ok(errorBookDtos);
     }
 
     @GetMapping("/questionType")
-    public R<List<Tree<Integer>>> queryAllType() {
+    public ResponseEntity<List<Tree<Integer>>> queryAllType() {
         List<QuestionType> questionTypes = questionTypeService.queryAllByLimit(0, 999);
         List<TreeNode<Integer>> nodeList = CollUtil.newArrayList();
         for (QuestionType questionType : questionTypes) {
@@ -54,6 +53,6 @@ public class ErrorBookController {
             tree.setWeight(treeNode.getWeight());
             tree.setName(treeNode.getName());
         });
-        return R.ok(treeList);
+        return ResponseEntity.ok(treeList);
     }
 }

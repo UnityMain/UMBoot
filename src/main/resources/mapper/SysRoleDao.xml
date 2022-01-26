@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unitymain.student.dao.SysRoleDao">
+
+    <resultMap id="BaseResultMap" type="com.unitymain.student.entity.SysRole">
+        <!--@Table sys_role-->
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="roleName" column="role_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          id, role_name
+        from student.sys_role
+        where id = #{id}
+    </select>
+
+    <!--查询单个-->
+    <select id="queryRoleByUserId" resultMap="BaseResultMap">
+        select sr.id, sr.role_name
+        from sys_user user
+            left join sys_user_role sur
+        on user.id = sur.user_id
+            left join sys_role sr on sur.role_id = sr.id
+        where user.id = #{userId}
+    </select>
+
+    <!--通过用户id查找角色列表-->
+    <select id="findByUserId" resultMap="BaseResultMap">
+        select sr.id, sr.role_name
+        from sys_user user
+        left join sys_user_role sur
+        on user.id = sur.user_id
+            left join sys_role sr on sur.role_id = sr.id
+        where user.id = #{userId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          id, role_name
+        from student.sys_role
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          id, role_name
+        from student.sys_role
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="roleName != null and roleName != ''">
+                and role_name = #{roleName}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into student.sys_role(role_name)
+        values (#{roleName})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update student.sys_role
+        <set>
+            <if test="roleName != null and roleName != ''">
+                role_name = #{roleName},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from student.sys_role where id = #{id}
+    </delete>
+
+</mapper>

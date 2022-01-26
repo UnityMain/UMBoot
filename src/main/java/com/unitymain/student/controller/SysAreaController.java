@@ -5,12 +5,10 @@ import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
-import com.baomidou.mybatisplus.extension.api.R;
-import com.unitymain.student.entity.QuestionType;
 import com.unitymain.student.entity.SysArea;
 import com.unitymain.student.service.SysAreaService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -37,11 +35,11 @@ public class SysAreaController {
      * @return 单条数据
      */
     @GetMapping("selectOne")
-    public SysArea selectOne(Integer id) {
+    public SysArea selectOne(String id) {
         return this.sysAreaService.queryById(id);
     }
     @GetMapping("all")
-    public R<List<Tree<String>>> selectAll() {
+    public ResponseEntity<List<Tree<String>>> selectAll() {
         List<SysArea> sysAreas = sysAreaService.queryAllByLimit(0, 999);
         List<TreeNode<String>> nodeList = CollUtil.newArrayList();
         for (SysArea sysArea : sysAreas) {
@@ -61,7 +59,7 @@ public class SysAreaController {
             tree.setWeight(treeNode.getWeight());
             tree.setName(treeNode.getName());
         });
-        return R.ok(treeList);
+        return ResponseEntity.ok(treeList);
     }
 
 }

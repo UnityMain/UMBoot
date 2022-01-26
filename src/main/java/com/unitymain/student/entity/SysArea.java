@@ -16,7 +16,7 @@ public class SysArea implements Serializable {
     /**
     * 主键
     */
-    private Integer id;
+    private String id;
     /**
     * 行政地区编号
     */

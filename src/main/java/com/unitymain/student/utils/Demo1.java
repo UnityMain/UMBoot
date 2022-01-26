@@ -16,10 +16,17 @@ import java.util.stream.Collectors;
 
 public class Demo1 {
     public static void main(String[] args) {
-        HttpResponse execute = HttpRequest.get("http://www.cwl.gov.cn/cwl_admin/kjxx/findDrawNotice?name=ssq&issueCount=30")
-                .header(Header.REFERER, "http://www.cwl.gov.cn/kjxx/ssq/kjgg/")
+        String cookie = HttpRequest.get("http://www.cwl.gov.cn/")
+                .execute()
+                .header("Set-Cookie");
+
+        HttpResponse response = HttpRequest.get("http://www.cwl.gov.cn/cwl_admin/" +
+                "front/cwlkj/search/kjxx/" +
+                "findDrawNotice?name=ssq&issueCount=30")
+                .header("Cookie",cookie)
                 .execute();
-        JSONObject jsonObject = JSONUtil.parseObj(execute.body());
+
+        JSONObject jsonObject = JSONUtil.parseObj(response.body());
         JSONArray result = jsonObject.getJSONArray("result");
         List<DoubleColorBall> dcbList = new ArrayList<>();
         List<String> redBall = new ArrayList<>();

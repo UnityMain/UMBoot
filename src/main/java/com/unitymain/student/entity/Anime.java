@@ -1,10 +1,12 @@
 package com.unitymain.student.entity;
 
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 /**
  * 动漫
  */
+@Component
 @Data
 public class Anime {
     /**

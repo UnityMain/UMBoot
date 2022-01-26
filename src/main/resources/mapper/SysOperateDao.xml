@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unitymain.student.dao.SysOperateDao">
+
+    <resultMap id="BaseResultMap" type="com.unitymain.student.entity.SysOperate">
+        <!--@Table sys_operate-->
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="code" column="code" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="url" column="url" jdbcType="VARCHAR"/>
+        <result property="parentId" column="parent_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          id, code, name, url, parent_id
+        from student.sys_operate
+        where id = #{id}
+    </select>
+
+    <!--查询单个-->
+    <select id="queryOperateByUserId" resultMap="BaseResultMap">
+        select so.id,so.name,so.url
+        from student.sys_user user
+         left join student.sys_user_role sur on user.id = sur.user_id
+         left join student.sys_role_power srp on sur.role_id = srp.role_id
+         left join student.sys_power_operate spo on srp.power_id = spo.power_id
+         left join student.sys_operate so on spo.operate_id = so.id
+        where user.id = #{userId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          id, code, name, url, parent_id
+        from student.sys_operate
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          id, code, name, url, parent_id
+        from student.sys_operate
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="code != null and code != ''">
+                and code = #{code}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="url != null and url != ''">
+                and url = #{url}
+            </if>
+            <if test="parentId != null">
+                and parent_id = #{parentId}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into student.sys_operate(code, name, url, parent_id)
+        values (#{code}, #{name}, #{url}, #{parentId})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update student.sys_operate
+        <set>
+            <if test="code != null and code != ''">
+                code = #{code},
+            </if>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="url != null and url != ''">
+                url = #{url},
+            </if>
+            <if test="parentId != null">
+                parent_id = #{parentId},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from student.sys_operate where id = #{id}
+    </delete>
+
+</mapper>

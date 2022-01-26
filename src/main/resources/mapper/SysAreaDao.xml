@@ -4,7 +4,7 @@
 
     <resultMap id="BaseResultMap" type="com.unitymain.student.entity.SysArea">
         <!--@Table sys_area-->
-        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="id" column="id" jdbcType="VARCHAR"/>
         <result property="code" column="code" jdbcType="VARCHAR"/>
         <result property="name" column="name" jdbcType="VARCHAR"/>
         <result property="shortName" column="short_name" jdbcType="VARCHAR"/>
