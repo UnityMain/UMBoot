@@ -1,2 +1,6 @@
 spring:
   profiles.active: dev
+
+
+test:
+  demo: E\upload\upload\

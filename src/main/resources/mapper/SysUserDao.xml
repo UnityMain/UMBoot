@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.unitymain.student.dao.SysUserDao">
+<mapper namespace="com.unitymain.core.dao.SysUserDao">
 
-    <resultMap id="BaseResultMap" type="com.unitymain.student.entity.SysUser">
+    <resultMap id="BaseResultMap" type="com.unitymain.core.entity.SysUser">
         <!--@Table sys_user-->
         <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="username" column="username" jdbcType="VARCHAR"/>

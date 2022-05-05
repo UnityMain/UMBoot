@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.unitymain.student.dao.SysMenuDao">
+<mapper namespace="com.unitymain.core.dao.SysMenuDao">
 
-    <resultMap id="BaseResultMap" type="com.unitymain.student.entity.SysMenu">
+    <resultMap id="BaseResultMap" type="com.unitymain.core.entity.SysMenu">
         <!--@Table sys_menu-->
         <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="name" column="name" jdbcType="VARCHAR"/>
@@ -10,12 +10,14 @@
         <result property="parent" column="parent" jdbcType="INTEGER"/>
         <result property="path" column="path" jdbcType="VARCHAR"/>
         <result property="component" column="component" jdbcType="VARCHAR"/>
+        <result property="icon" column="icon" jdbcType="VARCHAR"/>
+        <result property="hidden" column="hidden" jdbcType="BOOLEAN"/>
     </resultMap>
 
     <!--查询单个-->
     <select id="queryById" resultMap="BaseResultMap">
         select
-          id, name, code, parent, path, component
+          id, name, code, parent, path, component, icon
         from student.sys_menu
         where id = #{id}
     </select>
@@ -23,14 +25,14 @@
     <!--查询单个-->
     <select id="queryAllMenu" resultMap="BaseResultMap">
         select
-            id, name, code, parent, path, component
+            id, name, code, parent, path, component, icon , hidden
         from student.sys_menu
     </select>
 
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="BaseResultMap">
         select
-          id, name, code, parent, path, component
+          id, name, code, parent, path, component, icon
         from student.sys_menu
         limit #{offset}, #{limit}
     </select>
@@ -38,7 +40,7 @@
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="BaseResultMap">
         select
-          id, name, code, parent, path, component
+          id, name, code, parent, path, component, icon
         from student.sys_menu
         <where>
             <if test="id != null">
@@ -59,13 +61,16 @@
             <if test="component != null and component != ''">
                 and component = #{component}
             </if>
+            <if test="icon != null and icon != ''">
+                and icon = #{icon}
+            </if>
         </where>
     </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into student.sys_menu(name, code, parent, path, component)
-        values (#{name}, #{code}, #{parent}, #{path}, #{component})
+        insert into student.sys_menu(name, code, parent, path, component, icon)
+        values (#{name}, #{code}, #{parent}, #{path}, #{component}, #{icon})
     </insert>
 
     <!--通过主键修改数据-->
@@ -86,6 +91,9 @@
             </if>
             <if test="component != null and component != ''">
                 component = #{component},
+            </if>
+            <if test="icon != null and icon != ''">
+                icon = #{icon},
             </if>
         </set>
         where id = #{id}
