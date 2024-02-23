@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.unitymain.student.dao.PositionDao">
+<mapper namespace="com.unitymain.core.dao.PositionDao">
 
-    <resultMap id="BaseResultMap" type="com.unitymain.student.entity.Position">
+    <resultMap id="BaseResultMap" type="com.unitymain.core.entity.Position">
         <!--@Table position-->
         <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="fromArea" column="from_area" jdbcType="VARCHAR"/>

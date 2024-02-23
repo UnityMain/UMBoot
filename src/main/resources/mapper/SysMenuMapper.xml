@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unitymain.core.dao.SysMenuMapper">
+
+    <resultMap id="BaseResultMap" type="com.unitymain.core.entity.SysMenu">
+        <!--@Table sys_menu-->
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="code" column="code" jdbcType="VARCHAR"/>
+        <result property="parent" column="parent" jdbcType="INTEGER"/>
+        <result property="path" column="path" jdbcType="VARCHAR"/>
+        <result property="component" column="component" jdbcType="VARCHAR"/>
+        <result property="icon" column="icon" jdbcType="VARCHAR"/>
+        <result property="hidden" column="hidden" jdbcType="BOOLEAN"/>
+    </resultMap>
+
+    <select id="queryMenuByUsername" resultMap="BaseResultMap">
+        select so.id,so.name,so.code,so.parent,so.path,so.component,so.icon,so.hidden
+        from student.sys_user user
+                 left join student.sys_user_role sur on user.id = sur.user_id
+                 left join student.sys_role_power srp on sur.role_id = srp.role_id
+                 left join student.sys_permission spo on srp.power_id = spo.power_id
+                 left join student.sys_menu so on spo.limit_id = so.id
+        where user.username = #{username}
+          and spo.power_id = 2
+    </select>
+</mapper>

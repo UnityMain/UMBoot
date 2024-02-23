@@ -1,12 +1,10 @@
 package com.unitymain.wechat.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONUtil;
-import com.unitymain.student.bean.Result;
 import com.unitymain.wechat.entity.request.WxGzhInfo;
 import com.unitymain.wechat.entity.response.AccessToken;
 import com.unitymain.wechat.service.AccessTokenService;

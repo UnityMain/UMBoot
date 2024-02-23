@@ -1,7 +1,6 @@
 package com.unitymain.wechat.service;
 
 
-import com.unitymain.student.bean.Result;
 import com.unitymain.wechat.entity.response.AccessToken;
 
 /**

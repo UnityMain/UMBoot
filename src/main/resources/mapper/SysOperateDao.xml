@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.unitymain.student.dao.SysOperateDao">
+<mapper namespace="com.unitymain.core.dao.SysOperateDao">
 
-    <resultMap id="BaseResultMap" type="com.unitymain.student.entity.SysOperate">
+    <resultMap id="BaseResultMap" type="com.unitymain.core.entity.SysOperate">
         <!--@Table sys_operate-->
         <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="code" column="code" jdbcType="VARCHAR"/>
@@ -21,13 +21,14 @@
 
     <!--查询单个-->
     <select id="queryOperateByUserId" resultMap="BaseResultMap">
-        select so.id,so.name,so.url
+        select so.id,so.name,so.url,so.code
         from student.sys_user user
          left join student.sys_user_role sur on user.id = sur.user_id
          left join student.sys_role_power srp on sur.role_id = srp.role_id
-         left join student.sys_power_operate spo on srp.power_id = spo.power_id
-         left join student.sys_operate so on spo.operate_id = so.id
+         left join student.sys_permission spo on srp.power_id = spo.power_id
+         left join student.sys_operate so on spo.limit_id = so.id
         where user.id = #{userId}
+              and spo.power_id = 1
     </select>
 
     <!--查询指定行数据-->

@@ -4,18 +4,16 @@ import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.http.Header;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONObject;
-import com.unitymain.student.bean.Result;
+import com.unitymain.core.bean.Result;
 import com.unitymain.wechat.entity.response.AccessToken;
 import com.unitymain.wechat.service.AccessTokenService;
 import com.unitymain.wechat.service.MaterialService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 /**
