@@ -17,6 +17,8 @@ import java.util.Map;
 public class Demo4 {
     @SneakyThrows
     public static void main(String[] args) {
+        String a = new String();
+        a.toString();
         String url = "https://www.bilibili.com/video/BV1uX4y1c7Ro?spm_id_from=333.851.b_62696c695f7265706f72745f64616e6365.6";
         String html = HttpRequest.get(url)
                 .execute().body();

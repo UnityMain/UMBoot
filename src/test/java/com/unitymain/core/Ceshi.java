@@ -2,6 +2,7 @@ package com.unitymain.core;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Console;
+import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.HexUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.http.HttpRequest;
@@ -10,9 +11,15 @@ import cn.hutool.json.JSONUtil;
 import com.unitymain.core.entity.SysOperate;
 import org.junit.jupiter.api.Test;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import java.io.StringWriter;
+import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Ceshi {
 
@@ -47,7 +54,7 @@ public class Ceshi {
     @Test
     public void test4() {
         Student student = new Student();
-        student.setName("小明");
+//        student.setName("小明");
         Student student1 = null;
         Student student2 = new Student();
         boolean bool1 = BeanUtil.isNotEmpty(student);
@@ -61,7 +68,7 @@ public class Ceshi {
     @Test
     public void test5() {
         Student student = new Student();
-        student.setName("小明");
+//        student.setName("小明");
         JSONUtil.toJsonStr(student);
     }
 
@@ -100,7 +107,7 @@ public class Ceshi {
 
         List<String> strings = list.stream()
                 .flatMap(user3 -> user3.getPrims().stream())
-                .distinct().toList();
+                .distinct().collect(Collectors.toList());
 //                .collect(Collectors.groupingBy(String::toString
 //                        ,Collectors.counting()));
 //        List<String> collect = list.stream()
@@ -129,5 +136,166 @@ public class Ceshi {
         String s1 = new String(demo1);
 //        System.out.println(s);
         System.out.println(s1);
+    }
+
+    @Test
+    public void test11(){
+        String str = "你好吗？";
+        byte[] GBK = str.getBytes(Charset.forName("GBK"));
+        char[] chars = HexUtil.encodeHex(GBK);
+        System.out.println(chars);
+
+        String UTF8 = new String(GBK, Charset.forName("UTF-8"));
+        byte[] bytes = UTF8.getBytes(Charset.forName("UTF-8"));
+
+        char[] chars1 = HexUtil.encodeHex(bytes);
+        System.out.println(chars1);
+
+        String gbk = new String(bytes, Charset.forName("GBK"));
+
+        System.out.println(UTF8);
+        System.out.println(gbk);
+
+
+    }
+
+    @Test
+    public void test12() throws JAXBException {
+        JAXBContext context = JAXBContext.newInstance(Student.class);
+        Marshaller marshaller = context.createMarshaller();
+        //格式化
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,true);
+        //编码格式
+        marshaller.setProperty(Marshaller.JAXB_ENCODING,"UTF-8");
+        //是否省略xml头信息，默认不省略（false）
+        marshaller.setProperty(Marshaller.JAXB_FRAGMENT,true);
+        StringWriter writer = new StringWriter();
+        Student student = new Student();
+        marshaller.marshal(student,writer);
+        String s = writer.toString();
+        System.out.println(s);
+    }
+
+    @Test
+    public void test13(){
+        Ceshi ceshi = new Ceshi();
+
+        int i = ceshi.test14(1);
+        System.out.println(i);
+    }
+
+    public int test14(int i){
+        if(i<=100) {
+            int k = i += 1;
+            int j = i + test14(k);
+            System.out.println(j+"---"+k);
+            return j;
+        }
+        return 0;
+    }
+
+    @Test
+    public void test15(){
+        Map<String,Integer> map = new HashMap<>();
+        map.put("n",100);
+        map.put("sum",0);
+        Ceshi ceshi = new Ceshi();
+        System.out.println(map);
+        ceshi.fun(map);
+    }
+
+
+    public void fun(Map<String,Integer> map){
+        Integer n = map.get("n");
+        Integer sum = map.get("sum");
+        if(n!=0){
+            sum = sum +n;
+            n = n-1;
+            map.put("n",n);
+            map.put("sum",sum);
+            fun(map);
+        }
+        System.out.println(n+"---"+sum);
+    }
+    private List list  = new ArrayList();
+
+    @Test
+    public void test16(){
+        Thread thread1 = new Thread(()->{
+            List list1 = this.myTread();
+            Console.log(list1);
+        });
+
+        Thread thread2 = new Thread(()->{
+            List list2 = this.myTread();
+            Console.log(list2);
+        });
+        thread1.start();
+        thread2.start();
+    }
+
+
+    public List myTread(){
+        List result = new ArrayList();
+        synchronized (Ceshi.class){
+            if(list.size()!=0){
+                list.clear();
+            }
+            System.out.println(this.hashCode());
+            for(int i = 0;i<1000;i++){
+                Map map = new HashMap();
+                map.put("菜单"+i,i);
+                list.add(map);
+            }
+            result = list;
+            result.add(new HashMap<String,String>(){{
+                put("机构","32");
+            }});
+            HashSet h = new HashSet(list);
+            result.clear();
+            result.addAll(h);
+            /*try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }*/
+        }
+        return result;
+
+    }
+
+    @Test
+    public void test17(){
+        new Thread(()->{
+            String s = this.myThread1();
+            System.out.println(s);
+        }).start();
+        new Thread(()->{
+            String s = this.myThread1();
+            System.out.println(s);
+        }).start();
+        new Thread(()->{
+            String s = this.myThread1();
+            System.out.println(s);
+        }).start();
+//        System.out.println(body);
+    }
+
+    @Test
+    public String myThread1(){
+        HttpResponse execute = HttpRequest.get("http://www.baidu.com")
+                .execute();
+        System.out.println(execute.headers());
+//        System.out.println(body);
+        return null;
+    }
+
+    @Test
+    public void test18(){
+        String str = HexUtil.encodeHexStr("😊我2a你", CharsetUtil.CHARSET_UTF_8);
+        System.out.println(str);
+        String str1 = HexUtil.decodeHexStr("F09F9880", CharsetUtil.CHARSET_UTF_8);
+        System.out.println(str1);
+//        11100011 10000001 10000010
     }
 }

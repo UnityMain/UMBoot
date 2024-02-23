@@ -5,7 +5,9 @@ import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.unitymain.core.bean.Result;
+import com.unitymain.core.entity.SysRole;
 import com.unitymain.core.entity.SysUser;
+import com.unitymain.core.service.SysRoleService;
 import com.unitymain.core.service.SysUserService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +24,8 @@ import java.util.List;
 public class SysUserController {
     @Resource
     private SysUserService sysUserService;
+    @Resource
+    private SysRoleService sysRoleService;
 
     @GetMapping("/info")
     public Result info(HttpSession session) {
@@ -42,6 +46,12 @@ public class SysUserController {
         userPage.setRecords(records);
         userPage.setTotal(records.size());
         return Result.ok().body(userPage);
+    }
+
+    @GetMapping("/role")
+    public Result queryRoleList() {
+        List<SysRole> list = sysRoleService.list();
+        return Result.ok().body(list);
     }
 
     @PostMapping("/page")

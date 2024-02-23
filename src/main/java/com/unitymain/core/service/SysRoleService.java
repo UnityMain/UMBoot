@@ -1,5 +1,6 @@
 package com.unitymain.core.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.unitymain.core.entity.SysRole;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * @author UnityMain
  * @since 2022-01-20 17:16:39
  */
-public interface SysRoleService {
+public interface SysRoleService extends IService<SysRole> {
 
     /**
      * 通过ID查询单条数据

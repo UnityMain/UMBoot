@@ -1,5 +1,6 @@
 package com.unitymain.core.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.unitymain.core.dao.SysRoleDao;
 import com.unitymain.core.entity.SysRole;
 import com.unitymain.core.service.SysRoleService;
@@ -14,7 +15,7 @@ import java.util.List;
  * @since 2022-01-20 17:16:39
  */
 @Service("sysRoleService")
-public class SysRoleServiceImpl implements SysRoleService {
+public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> implements SysRoleService {
     @Resource
     private SysRoleDao sysRoleDao;
 

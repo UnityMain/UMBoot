@@ -1,5 +1,6 @@
 package com.unitymain.core.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.unitymain.core.entity.SysRole;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Mapper;
@@ -13,7 +14,7 @@ import java.util.List;
  * @since 2022-01-20 17:16:39
  */
 @Mapper
-public interface SysRoleDao {
+public interface SysRoleDao extends BaseMapper<SysRole> {
 
     /**
      * 通过ID查询单条数据
@@ -56,14 +57,6 @@ public interface SysRoleDao {
      * @return 对象列表
      */
     List<SysRole> queryAll(SysRole sysRole);
-
-    /**
-     * 新增数据
-     *
-     * @param sysRole 实例对象
-     * @return 影响行数
-     */
-    int insert(SysRole sysRole);
 
     /**
      * 修改数据

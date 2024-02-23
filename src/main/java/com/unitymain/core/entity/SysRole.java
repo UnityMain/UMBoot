@@ -1,5 +1,6 @@
 package com.unitymain.core.entity;
 
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import org.springframework.security.core.GrantedAuthority;
 
 /**
@@ -8,7 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
  * @author UnityMain
  * @since 2022-01-20 17:16:39
  */
-public class SysRole implements GrantedAuthority {
+public class SysRole extends Model<SysRole> implements GrantedAuthority {
     private static final long serialVersionUID = 630524003608650111L;
     /**
     * 角色ID

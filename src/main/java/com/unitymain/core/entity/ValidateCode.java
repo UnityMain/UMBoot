@@ -2,7 +2,6 @@ package com.unitymain.core.entity;
 
 import lombok.Data;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -11,7 +10,6 @@ import java.io.Serializable;
  */
 @Data
 public class ValidateCode implements Serializable {
-    @Serial
     private static final long serialVersionUID = -6868563888226660464L;
 
     /**

@@ -19,8 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 用户登录service
+ * <h2>用户权限获取类</h2>
  * @author UnityMain
+ * @see #loadUserByUsername
  */
 @Service
 public class UserServiceImpl implements UserDetailsService {
@@ -34,17 +35,33 @@ public class UserServiceImpl implements UserDetailsService {
     @Resource
     private SysOperateDao sysOperateDao;
 
+    /**
+     * 通过用户名获取用户的权限，用户信息的方法
+     * @param username   用户名
+     * @return  用户数据
+     * @throws UsernameNotFoundException    用户名不存在异常类
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         SysUser sysUser = sysUserDao.selectOne(
                 new QueryWrapper<SysUser>()
                         .eq("username",username));
         List<GrantedAuthority> authorityList = new ArrayList<>();
+
+        if(sysUser==null){
+            return null;
+        }
         List<SysOperate> sysOperates = sysOperateDao.queryOperateByUserId(sysUser.getId());
         List<SysRole> sysRoles = sysRoleDao.queryRoleByUserId(sysUser.getId());
 
+        //每个用户都拥有一个匿名角色
+        SysRole everyone = new SysRole();
+        everyone.setRoleName("ROLE_ANONYMOUS");
+        everyone.setId(sysUser.getId());
+        sysRoles.add(everyone);
+
         for(SysOperate sysOperate : sysOperates){
-            authorityList.add(new SimpleGrantedAuthority(sysOperate.getUrl()));
+            authorityList.add(new SimpleGrantedAuthority(sysOperate.getCode()));
         }
         for(SysRole sysRole : sysRoles){
             authorityList.add(new SimpleGrantedAuthority(sysRole.getRoleName()));

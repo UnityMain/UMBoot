@@ -1,13 +1,21 @@
 package com.unitymain.core.config;
 
-import com.unitymain.core.component.*;
+import com.unitymain.core.component.AdminAccessDecisionManager;
+import com.unitymain.core.component.AdminAuthenticationEntryPoint;
+import com.unitymain.core.component.AdminLogoutSuccessHandler;
+import com.unitymain.core.component.CustomAccessDeniedHandler;
 import com.unitymain.core.filter.AdminAuthenticationProcessingFilter;
 import com.unitymain.core.filter.AdminFilterSecurityMetadataSource;
+import com.unitymain.core.filter.AdminOncePerRequestFilter;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -26,13 +34,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private AdminAccessDecisionManager adminAccessDecisionManager;
     @Resource
     private CustomAccessDeniedHandler customAccessDeniedHandler;
-
     @Resource
     private AdminAuthenticationEntryPoint adminAuthenticationEntryPoint;
     @Resource
     private AdminLogoutSuccessHandler adminLogoutSuccessHandler;
-    @Resource
+    //    @Resource
     private AdminAuthenticationProcessingFilter adminAuthenticationProcessingFilter;
+    @Resource
+    private AdminOncePerRequestFilter adminOncePerRequestFilter;
 
 
     /**
@@ -54,18 +63,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         //表单登录方式
-        http.formLogin()
-                .loginPage("/login")
-                .permitAll()
-                .and().logout()
-                .logoutUrl("/logout")
-                .logoutSuccessHandler(adminLogoutSuccessHandler)
+        http
+                /**
+                 * 使用SpringSecurity默认的登陆认证器
+                 * <code>.formLogin()</code>
+                 * <code>.loginPage("/login1")</code>
+                 * <code>.permitAll()</code>
+                 * <code>.and()</code>
+                 */
+                /**
+                 * 使用SpringSecurity默认的注销功能
+                 * <code>.logout()</code>
+                 * <code>.logoutUrl("/logout")</code>
+                 * <code>.logoutSuccessHandler(adminLogoutSuccessHandler)</code>
+                 * <code>.and()</code>
+                 */
+
                 //自定义拦截
-                .and().authorizeRequests()
+                .authorizeRequests().antMatchers("/login").permitAll()
                 //屏蔽一些错误
-                .antMatchers("/error/**").permitAll()
-                .anyRequest().authenticated()
-                .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
+                .antMatchers("/error/**").permitAll().anyRequest().authenticated().withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
                     @Override
                     public <O extends FilterSecurityInterceptor> O postProcess(O object) {
                         // 权限查询器
@@ -77,19 +94,28 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 })
                 //登录异常拦截
                 .and().exceptionHandling()
-                // 认证失败处理类
+                //认证失败处理类
                 .authenticationEntryPoint(adminAuthenticationEntryPoint)
+                //没有权限异常
                 .accessDeniedHandler(customAccessDeniedHandler)
-
                 //解决csrf不支持post请求的问题
-                .and().csrf().disable();
-
+                .and().csrf().disable()
+                // 基于token，所以不需要session
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        //添加jwt验证器
+        http.addFilterBefore(adminOncePerRequestFilter, UsernamePasswordAuthenticationFilter.class);
         //自定义登录认证的功能
-        http.addFilterAt(adminAuthenticationProcessingFilter, UsernamePasswordAuthenticationFilter.class);
+//        http.addFilterAt(adminAuthenticationProcessingFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/js/**","/image/**","/css/**");
+        web.ignoring().antMatchers("/js/**", "/image/**", "/css/**");
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

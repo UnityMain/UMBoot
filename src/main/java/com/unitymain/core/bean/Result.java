@@ -17,7 +17,7 @@ public class Result<T> implements Serializable {
     /**
      * 描述信息
      */
-    private String error;
+    private String msg;
 
     /**
      * 结果
@@ -29,9 +29,9 @@ public class Result<T> implements Serializable {
     }
 
 
-    public Result(long status, String error, T data) {
+    public Result(long status, String msg, T data) {
         this.status = status;
-        this.error = error;
+        this.msg = msg;
         this.data = data;
     }
 
@@ -52,20 +52,20 @@ public class Result<T> implements Serializable {
     }
 
     public <T> Result<T> body(T data){
-        return new Result(this.status,this.error,data);
+        return new Result(this.status,this.msg,data);
     }
 
     private static <T> Result<T> status(ApiCode apiCode) {
         Result<T> apiResult = new Result<>();
         apiResult.setStatus(apiCode.getCode());
-        apiResult.setError(apiCode.getMsg());
+        apiResult.setMsg(apiCode.getMsg());
         return apiResult;
     }
 
     private static <T> Result<T> status(long code, String msg) {
         Result<T> apiResult = new Result<>();
         apiResult.setStatus(code);
-        apiResult.setError(msg);
+        apiResult.setMsg(msg);
         return apiResult;
     }
 
@@ -73,7 +73,7 @@ public class Result<T> implements Serializable {
         Result<T> apiResult = new Result<>();
         apiResult.setStatus(code);
         apiResult.setData(data);
-        apiResult.setError(msg);
+        apiResult.setMsg(msg);
         return apiResult;
     }
 }

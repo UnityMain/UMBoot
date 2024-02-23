@@ -21,13 +21,14 @@
 
     <!--查询单个-->
     <select id="queryOperateByUserId" resultMap="BaseResultMap">
-        select so.id,so.name,so.url
+        select so.id,so.name,so.url,so.code
         from student.sys_user user
          left join student.sys_user_role sur on user.id = sur.user_id
          left join student.sys_role_power srp on sur.role_id = srp.role_id
-         left join student.sys_power_operate spo on srp.power_id = spo.power_id
-         left join student.sys_operate so on spo.operate_id = so.id
+         left join student.sys_permission spo on srp.power_id = spo.power_id
+         left join student.sys_operate so on spo.limit_id = so.id
         where user.id = #{userId}
+              and spo.power_id = 1
     </select>
 
     <!--查询指定行数据-->

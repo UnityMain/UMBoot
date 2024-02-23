@@ -11,10 +11,25 @@ spring:
     url: jdbc:mysql://localhost:3306/student?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
     username: root
     password: root1234
+  redis:
+    # Redis服务器地址 写你的ip
+    host: 127.0.0.1
+    # Redis服务器连接端口
+    port: 6379
+    # Redis服务器连接密码（默认为空）
+    password:
+    # 连接超时时间（毫秒） 去链接redis服务端
+    timeout: 6000
+
 
 logging:
   level:
     com:
-     unitymain:
-       student:
-        dao: debug
+     unitymain: debug
+
+jwt:
+  tokenHeader: X-Token #JWT存储的请求头
+  tokenHead: Bearer  #令牌前缀
+  secret: yz-admin-secret #JWT加解密使用的密钥
+#  expiration: 15
+  expiration: 604800 #JWT的超期限时间秒(60*60*24)

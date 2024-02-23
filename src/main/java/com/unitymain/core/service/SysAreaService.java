@@ -55,7 +55,4 @@ public interface SysAreaService {
      * @return 是否成功
      */
     boolean deleteById(String id);
-
-    @Transactional(rollbackFor = Exception.class,propagation = Propagation.REQUIRES_NEW,isolation = Isolation.READ_UNCOMMITTED)
-    void test1(String name, long start, long end, long edd);
 }

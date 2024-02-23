@@ -1,16 +1,21 @@
 package com.unitymain.core;
 
-import lombok.Data;
-
-import java.io.Serial;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 
-@Data
+@XmlRootElement(name = "student")
 public class Student implements Serializable {
 
-    @Serial
     private static final long serialVersionUID = 1L;
 
-    private String name ;
+    @XmlTransient
+    private String name = "妙妙";
+
+    @XmlElement
+    public String getName() {
+        return "二货";
+    }
 
 }
